@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/basesystem.iml" filepath="$PROJECT_DIR$/basesystem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/basesystem_interface/basesystem_interface.iml" filepath="$PROJECT_DIR$/basesystem_interface/basesystem_interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/basesystem_web/basesystem_web.iml" filepath="$PROJECT_DIR$/basesystem_web/basesystem_web.iml" />
+    </modules>
+  </component>
+</project>

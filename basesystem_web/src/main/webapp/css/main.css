@@ -1,0 +1,71 @@
+
+.search *:focus{outline :none;}
+.search{
+	width:auto;
+	height:35px;
+	background: #f6f6f6;
+	padding:2px;
+	vertical-align:middle;
+}
+.search  .text{
+	width: 150px;
+	height: 30px;
+	border :1px solid #aaa;
+	padding: 3px 8px;
+	border-radius: 5px;
+}
+.search  .button{
+	width: 100px;
+	height: 30px;
+	cursor:pointer;
+	border :1px solid #aaa;
+	padding: 3px 8px 3px 40px;
+	border-radius: 5px;
+	background:url(icon/24/magnifier.png)  no-repeat center;
+	/*background-position:left;*/
+	background-position: 8px 2px;
+	font-family:微软雅黑;
+	font-size:14px;
+	font-weight:bold;
+}
+
+.search .text{
+	transition: padding .25s;
+	-o-transition: padding  .25s;
+	-moz-transition: padding  .25s;
+	-webkit-transition: padding  .25s;
+}
+
+.bd{
+	border:none;
+	margin-top:0px;
+	margin-bottom: 1px;
+}
+
+.jTablesTr td{
+	cursor:pointer;
+}
+.jTablesTr .selected{
+	background-color:red
+}
+.arrow-left {  
+    width: 0;     
+    height: 0;     
+    border-bottom: 15px solid transparent;  /* 下边框的高 */    
+    border-top: 15px solid transparent; /* 上方边框的高 */    
+    border-right: 10px solid yellow; /* 右边框的长度|宽度，以及背景色 */    
+    font-size: 0;    
+    line-height: 0;    
+}   
+.arrow-right {    
+	float:right;
+	padding-right:5px;
+	height:36px;
+    width: 0;     
+    height: 0;     
+    border-bottom: 15px solid transparent;  /* 下边框的高 */    
+    border-top: 15px solid transparent; /* 上方边框的高 */    
+    border-left: 60px solid green; /* 左边框的长度|宽度，以及背景色 */    
+    font-size: 0;    
+    line-height: 0;    
+}   

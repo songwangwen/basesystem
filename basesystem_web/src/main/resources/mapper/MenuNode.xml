@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.car.system.dao.IMenuDAO">
+    <sql id="all_column">
+		  NODE_ID nodeId,
+		  NODE_NAME nodeName,
+		  node_model nodeModel,
+		  ICON_CLS iconCls,
+		  url url,
+		  NODE_TYPE nodeType,
+		  PARENT_ID parentId,
+		  REMARK
+	</sql>
+    <sql id="all_column_tree">
+		  NODE_ID id,
+		  NODE_NAME text,
+		  ICON_CLS iconCls,
+		  PARENT_ID parentId
+	</sql>
+    <select id="getMenuNodeList" resultType="org.car.system.model.MenuNode" parameterType="org.car.system.model.MenuNode">
+     	SELECT
+		<include refid="all_column" />
+    	 FROM SYSTEM_MENU  WHERE DELETE_FLAG=0 
+    	 <if test="nodeType != null and nodeType!=''">
+	        and node_type=#{nodeType,jdbcType=VARCHAR}
+	     </if>
+    	<if test="nodeIdSet != null and nodeIdSet.size()>0">
+			AND NODE_ID in 
+			<foreach collection="nodeIdSet" item="nodeId" open="(" close=")" separator=",">
+				#{nodeId}
+			</foreach>
+		 </if>
+	     order by sort 
+    </select>
+    <select id="getTreeNodeList" resultType="org.car.common.model.TreeNode">
+     	  SELECT
+		 <include refid="all_column_tree" />
+    	 FROM SYSTEM_MENU  WHERE DELETE_FLAG=0 
+	     order by sort
+    </select>
+</mapper>

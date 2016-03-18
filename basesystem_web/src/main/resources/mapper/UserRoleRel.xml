@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.car.system.dao.IUserRoleRelDAO">
+	<sql id="all_column">
+		  user_id userId,
+		  role_id roleId,
+		  user_name userName,
+		  role_name roleName
+	</sql>
+   <insert  id ="batchInsertUserRoleRel" parameterType ="java.util.List" >   
+	    insert into system_user_role_rel
+	    (user_id,role_id,user_name,role_name,create_user,create_time) values  
+	    <foreach collection="list" item= "item" index ="index" separator=",">
+	       (
+	       	#{item.userId,jdbcType=BIGINT}, 
+	       	#{item.roleId,jdbcType=BIGINT}, 
+	       	#{item.userName,jdbcType=VARCHAR}, 
+	       	#{item.roleName,jdbcType=VARCHAR}, 
+	        #{item.createUser,jdbcType=BIGINT},
+	        now()
+	       )
+	    </foreach >  
+	</insert>
+	
+	<delete id="deleteUserRoleRelByRoleId" parameterType="long">
+		delete from system_user_role_rel where role_id = #{roleId}
+	</delete> 
+	
+	<delete id="deleteUserRoleRelByUserId" parameterType="long">
+		delete from system_user_role_rel where user_id = #{userId}
+	</delete> 
+	
+	<select id="queryUserRoleRelByRoleId" parameterType="long" resultType="org.car.system.model.UserRoleRel">
+		 SELECT
+		<include refid="all_column" />
+		FROM system_user_role_rel
+		where role_id = #{roleId}
+	</select> 
+	<select id="queryUserRoleRelByUserId" parameterType="long" resultType="org.car.system.model.UserRoleRel">
+		 SELECT
+		<include refid="all_column" />
+		FROM system_user_role_rel
+		where user_id = #{userId}
+	</select> 
+</mapper>

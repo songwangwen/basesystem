@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<!-- saved from url=(0144)http://121.40.148.178:8080/CommonModule/User/UserRole?CompanyId=31b05701-60ef-405c-87ba-af47049e3f48&UserId=4db163ab-e74e-4a0d-882d-30168a72bd77 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>用户管理>用户角色</title>
+   <!--框架必需start-->
+     <!-- bootstrap -->
+	<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">  
+    <link href="/css/style/learunui-framework.css" rel="stylesheet">
+    
+    <script src="/js/common/jquery-1.8.2.min.js"></script>
+    <script src="/js/common/learunui-framework.js"></script>
+    <!--框架必需end-->
+    <!-- JQuery alertify组件，右下角提示弹框-->
+    <script src="/js/alertify/alertify.min.js" type="text/javascript"></script>
+    <script src="/pages/js/main.js"></script>
+    <!--表单验证组件start-->
+    <script src="/js/validator/learunui-validator.js"></script>
+    <!--表单验证组件end-->
+    <!--布局组件start-->
+    <script src="/js/common/splitter.js"></script>
+    <!--布局组件end-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Loadlayout();
+        });
+    </script>
+</head>
+<body>
+    <div>
+        
+<script>
+    var userId = GetQuery('userId');                      //用户主键
+    $(function () {
+        init();
+    })
+    //加载角色
+    function init() {
+        AjaxJson("/role/queryRoleList.json", {"userId":userId}, function (data) {
+        	if(data.flag){
+            	$(".sys_spec_text").html(data.msg);
+        	}
+        });
+        $("#RoleList li").click(function () {
+            if (!$(this).attr('disabled')) {
+                if (!!$(this).hasClass("selected")) {
+                    $(this).removeClass("selected");
+                } else {
+                    $(this).addClass("selected").siblings("li");
+                }
+            }
+        });
+        //自定义复选框 全选/反选
+        $("#CheckButton").click(function () {
+            if (!!$(this).hasClass("checkAllOff")) {
+                $(this).attr('title', '反选');
+                $(this).text('反选');
+                $(this).attr('class', 'checkAllOn');
+                $('.sys_spec_text li').addClass('selected');
+            } else {
+                $(this).attr('title', '全选');
+                $(this).text('全选');
+                $(this).attr('class', 'checkAllOff');
+                $('.sys_spec_text li').removeClass('selected');
+            }
+        });
+        //模糊查询角色（注：这个方法是理由jquery查询）
+        $("#txt_Search").keyup(function () {
+            if ($(this).val() != "") {
+                var Search = $(this).val();
+                window.setTimeout(function () {
+                    $(".sys_spec_text li")
+                     .hide()
+                     .filter(":contains('" + (Search) + "')")
+                     .show();
+                }, 100);
+            } else {
+                $(".sys_spec_text li").show();
+            }
+        }).keyup();
+    }
+    //保存事件
+    function AcceptClick(callBack) {
+        Loading(true, "正在提交数据...");
+            var roleIds = []; 
+            $('.sys_spec_text .selected a').each(function () { roleIds.push($(this).attr('id'));});
+            var postData = {"roleIds":roleIds.join(","),"userId":userId};
+            AjaxJson("/user/configureRoleSubmit.json", postData, function (data) {
+                Loading(false);
+                if(data.flag){//成功
+	                javascript:top.msg.ok(data.msg);
+               		 callBack();
+               		 closeDialog();
+            	}else{
+            		//失败
+	                javascript:top.msg.error(data.msg);
+            	}
+            });
+    }
+</script>
+<div class="note-prompt" style="margin: 1px;">
+    温馨提示：选中复选框即可授予相应权限，取消选中则回收相应权限。
+</div>
+<div class="border" style="margin: 1px;">
+    <div class="btnbartitle">
+        <div style="float: left">
+            	角色查询：
+            <input id="txt_Search" type="text" class="btnbartitleinput " style="width:300px;" placeholder="   请输入角色名称关键字">
+        </div>
+        <div style="float: right">
+            <label id="CheckButton" class="checkAllOff" title="全选">全选</label>
+        </div>
+    </div>
+    <div class="ScrollBar" id="RoleList" style="height:275px;">
+        <ul class="sys_spec_text">
+        </ul>
+    </div>
+</div>
+
+    </div>
+
+
+</body></html>

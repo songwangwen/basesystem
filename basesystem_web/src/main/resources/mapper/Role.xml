@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.car.system.dao.IRoleDAO">
+    <sql id="all_column">
+		 id,
+		 role_name roleName,
+		 remark remark,
+		 create_time createtime,
+		 create_time createTime,
+		 create_user createUser,
+		 update_time updateTime,
+		 update_user updateUser,
+  		 deleted deleted,
+  		 version version
+	</sql>
+	<!-- 查询分页 -->
+	 <select id="getAllRole"  resultType="org.car.system.model.Role">
+        SELECT
+		<include refid="all_column" />
+		FROM system_role
+		WHERE deleted=0
+	    order by id
+    </select>
+	 <select id="getAllRoleForPage" parameterType="java.util.Map" resultType="org.car.system.model.Role">
+        SELECT
+		<include refid="all_column" />
+		FROM system_role
+		WHERE deleted=0
+	 	<if test="roleName != null and roleName!=''">
+	        and role_name LIKE CONCAT(CONCAT('%', #{roleName, jdbcType=VARCHAR}),'%')  
+	    </if>
+	    order by ${sortCol}  ${sortType}
+        limit #{pageIndex},#{pageSize}
+    </select>
+	<!-- 查询分总记录数 -->
+    <select id="getAllRoleSize" parameterType="java.util.Map" resultType="int">
+        SELECT count(id) FROM system_role 
+		WHERE deleted=0
+	 	<if test="roleName != null and roleName!=''">
+	        and role_name LIKE CONCAT(CONCAT('%', #{roleName, jdbcType=VARCHAR}),'%')  
+	    </if>
+    </select>
+    <!-- 新增用户 -->
+    <insert id="insertRole" parameterType="org.car.system.model.Role">  
+		INSERT INTO system_role
+            (role_name,
+             remark,
+             create_user,
+             update_user,
+             create_time,
+             update_time,
+             deleted
+             )
+             VALUES 
+             (
+             	#{roleName},
+             	#{remark},
+             	#{createUser},	
+             	#{updateUser},	
+             	now(),now(),0
+             )
+        <!-- 
+        	为了返回自增的id值
+         -->
+	    <selectKey resultType="long" keyProperty="id">  
+	        select last_insert_id() as ID from system_role limit 1  
+	    </selectKey>  
+	</insert>  
+    <!-- 新增用户 -->
+    <update id="updateRole" parameterType="org.car.system.model.Role">  
+		UPDATE system_role SET  
+		<if test="roleName != null and roleName!=''">
+	        role_name=#{roleName, jdbcType=VARCHAR},  
+	    </if>
+		<if test="remark != null and remark!=''">
+	        remark=#{remark, jdbcType=VARCHAR},  
+	    </if>
+	    <if test="deleted != null">
+	   		deleted=#{deleted,jdbcType=BIT},
+	    </if>
+		<if test="updateUser != null and updateUser!=''">
+	    	update_user=#{updateUser,jdbcType=INTEGER}, 
+	    </if>
+		<if test="updateTime != null and updateTime!=''">
+	    	update_time=#{updateTime,jdbcType=TIMESTAMP},
+	    </if>
+	    VERSION = #{version,jdbcType=INTEGER} +1
+	    WHERE id = #{id,jdbcType=INTEGER} 
+	</update>  
+	
+	<select id="getRoleById" parameterType="long" resultType="org.car.system.model.Role">
+		 SELECT
+		<include refid="all_column" />
+		FROM system_role where id=#{id}
+	</select>
+</mapper>

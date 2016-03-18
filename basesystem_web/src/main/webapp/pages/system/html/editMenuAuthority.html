@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>用户管理》表单页面</title>
+    <!--框架必需start-->
+    <link href="/css/style/learunui-framework.css" rel="stylesheet">
+    <script src="/js/common/jquery-1.8.2.min.js"></script>
+    <script src="/js/common/learunui-framework.js"></script>
+    <!--框架必需end-->
+    <!--日期组件start-->
+<!--    <script src="WdatePicker.js"></script><link href="WdatePicker.css" rel="stylesheet" type="text/css">-->
+    <!--日期组件start-->
+    <!--表单验证组件start-->
+    <script src="/js/validator/learunui-validator.js"></script>
+    <!--表单验证组件end-->
+    <!--布局组件start-->
+    <script src="/js/common/splitter.js"></script>
+     <!-- 树 -->
+    <link href="/js/easyui/easyui.css" rel="stylesheet" type="text/css">
+    <link href="/css/icon.css" rel="stylesheet" type="text/css">
+    <script src="/js/easyui/jquery.easyui.min.js" type="text/javascript"></script>
+    <!-- 工具 -->
+    <script src="/pages/js/main.js" type="text/javascript"></script>
+    <!--布局组件end-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Loadlayout();
+        });
+    </script>
+</head>
+<body>
+    <div>
+        
+<script type="text/javascript">
+    $(function () {
+        //初始化树
+        $('#authorityTree').tree({  
+	    		   url:'/menu/authorityList.json?roleId='+GetQuery('KeyValue'),
+	    		   method:'post',
+	    		   animate:true,
+	    		   checkbox:true
+	    }); 
+    })
+    //保存事件
+    function AcceptClick() {
+    	var flag = false;
+    	//子节点有一部分选中，则会显示成实心方框
+    	var parrentNodes = $('#authorityTree').tree('getChecked','indeterminate');
+    	//被勾选按钮
+    	var nodes = $('#authorityTree').tree('getChecked');
+    	if(nodes.length>0){
+    		flag = true;
+    	}else{
+	    	top.msg.warning('至少选择一个按钮或菜单的操作权限！');
+    	}
+    	if(flag){
+	    	var authority =[];
+	    	for(var i=0; i<nodes.length; i++){
+					authority.push(nodes[i].id);
+			}
+	    	for(var j=0;j<parrentNodes.length; j++){
+					authority.push(parrentNodes[j].id);
+			}
+	        Loading(true, "正在提交数据...");
+	    	AjaxJson("/role/configureAuthority.json", {'id': GetQuery('KeyValue'),'authority':authority.join(",")}, function (data) {
+	                if(data.flag){//成功
+		                javascript:top.msg.ok(data.msg);
+	            	}else{
+	            		//失败
+		                javascript:top.msg.error(data.msg);
+	            	}
+	                if(data.flag){
+	               		 closeDialog();
+	                }
+	         });
+    	}
+//        window.setTimeout(function () {
+//            var postData = GetWebControls("#form1");
+//            postData["BuildFormJson"] = JSON.stringify(GetWebControls("#CustomAttribute"));
+//            AjaxJson("/CommonModule/User/SubmitUserForm?KeyValue=" + GetQuery('KeyValue'), postData, function (data) {
+//                tipDialog(data.Message, 3, data.Code);
+//                top.frames[tabiframeId()].windowload();
+//                closeDialog();
+//            });
+//        }, 200);
+    }
+</script>
+	<form id="form1">
+	    <div id="message" style="display: none; padding: 1px; padding-bottom: 0px;"></div>
+	    <div class="ScrollBar" style="margin: 1px; overflow: hidden;">
+	        <!--基本信息-->
+	        <div id="basic" class="tabPanel">
+	        		<div>
+<!--	        			<span>操作菜单树</span>-->
+	        		</div>
+	            	<ul id="authorityTree" class="easyui-tree"></ul>
+	        </div>
+	    </div>
+	</form>
+    </div>
+</body></html>

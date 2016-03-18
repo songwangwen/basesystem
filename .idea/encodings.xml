@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/basesystem_interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/basesystem_web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/basesystem_web/src/main/java/org" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/basesystem_web/src/main/resources/config" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/basesystem_web/src/main/resources/log4j.properties" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/basesystem_web/src/main/resources/mapper" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/basesystem_web/src/main/resources/service.properties" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/basesystem_web/src/main/webapp/META-INF" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/basesystem_web/src/main/webapp/bootstrap" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/basesystem_web/src/main/webapp/components" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/basesystem_web/src/main/webapp/css" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/basesystem_web/src/main/webapp/document" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/basesystem_web/src/main/webapp/images" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/basesystem_web/src/main/webapp/js" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/basesystem_web/src/main/webapp/pages" charset="GBK" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

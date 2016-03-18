@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)http://121.40.148.178:8080/CommonModule/SystemSetup/Index -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>应用配置</title>
+    <!--框架必需start-->
+    <link href="http://121.40.148.178:8080/Content/Styles/learunui-framework.css" rel="stylesheet">
+    <script src="jquery-1.8.2.min.js"></script>
+    <script src="learunui-framework.js"></script>
+    <!--框架必需end-->
+    <!--jqgrid表格组件start-->
+    <script src="jquery-ui-custom.min.js"></script>
+    <script src="grid.locale-cn.js"></script>
+    <link href="http://121.40.148.178:8080/Content/Scripts/jqgrid/css/jqgrid.css" rel="stylesheet">
+    <script src="jqGrid.js"></script>
+    <!--表格组件end-->
+    <!--树形组件start-->
+    <link href="http://121.40.148.178:8080/Content/Scripts/tree/tree.css" rel="stylesheet">
+    <script src="tree.js"></script>
+    <!--树形组件end-->
+    <!--布局组件start-->
+    <script src="splitter.js"></script>
+    <!--布局组件end-->
+    <!--日期组件start-->
+    <script src="WdatePicker.js"></script><link href="WdatePicker.css" rel="stylesheet" type="text/css">
+    <!--日期组件start-->
+    <!--表单验证组件start-->
+    <script src="learunui-validator.js"></script>
+    <!--表单验证组件end-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            top.Loadlayout();
+        });
+    </script>
+</head>
+<body>
+<script type="text/javascript">
+</script>
+<div class="bd" style="border-bottom: none; margin-top: 1px; margin-bottom: 1px;">
+    <div class="tipstitle_title settingtable bold bd todayInfoPanelTab rightPanelTitle_normal">
+        <div class="tab_list_top" style="position: absolute">
+            <div id="TabViewBarameter" class="tab_list bd actived" onclick="top.Tabchange(TabViewBarameter)">站点设置</div>
+            <div id="TabXmlFormat" class="tab_list bd" onclick="top.Tabchange(TabXmlFormat)">授权信息</div>
+            <div id="TabXmlFormat2" class="tab_list bd" onclick="top.Tabchange(TabXmlFormat2)">数据库信息</div>
+        </div>
+    </div>
+</div>
+</body></html>

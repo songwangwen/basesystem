@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>用户管理》表单页面</title>
+    <!--框架必需start-->
+	<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">  
+    <link href="/css/style/learunui-framework.css" rel="stylesheet">
+    <script src="/js/common/jquery-1.8.2.min.js"></script>
+    <script src="/js/common/learunui-framework.js"></script>
+    <!--框架必需end-->
+    <!-- JQuery alertify组件，右下角提示弹框-->
+    <script src="/js/alertify/alertify.min.js" type="text/javascript"></script>
+    <script src="/pages/js/main.js"></script>
+    <!--表单验证组件start-->
+    <script src="/js/validator/learunui-validator.js"></script>
+    <!--表单验证组件end-->
+    <!--布局组件start-->
+    <script src="/js/common/splitter.js"></script>
+    <!--布局组件end-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Loadlayout();
+        });
+    </script>
+</head>
+<body>
+    <div>
+        
+<script type="text/javascript">
+    var submitUrl = "";
+    var editFlag = false;
+    $(function () {
+        //根据前台传递的主键查询用户实体信息
+        if (GetQuery('KeyValue')!='') {
+        	editFlag = true;
+        	//编辑状态，密码不允许修改,密码框隐藏
+        	var url = "/user/queryUserById.json";
+            AjaxJson(url, {"id": GetQuery('KeyValue') }, function (data) {
+            	//赋值form
+            	SetWebControls(data);
+            	//登录名称不可编辑
+	            $("#userName").attr("disabled",true);
+            });
+            //绑定部门
+            //BindDepartment(); $("#DepartmentId").val(GetQuery('DepartmentId'));
+            
+            //隐藏密码栏目
+            $(".passwordTR").hide();
+            document.getElementById("password").removeAttribute("checkexpession");
+            document.getElementById("newPassword").removeAttribute("checkexpession");
+        }
+    })
+    /**
+    	*保存事件
+    	*@params callBack 响应函数
+    */
+    function AcceptClick(callBack) {
+    	var f = false; 
+    	var flag = CheckDataValid('#userForm');
+    	if(flag){
+	        var password = $("#password").val();
+	        var newPassword = $("#newPassword").val();
+	        if (!editFlag&&(password!= newPassword)) {
+	            tipCss("#newPassword", "您两次输入的密码不一致");
+	            flag = false;
+	        }else{
+       			f =  FieldExist('userName','system_user','user_name','id','登录名')
+	        }
+    	}
+        if(f){
+        	if(editFlag){
+        		  submitUrl = "/user/editUser.json";
+        	}else{
+        	      submitUrl = "/user/addNewUser.json";
+        	}
+	        Loading(true, "正在提交数据...");
+	        var jsonForm  = GetWebControls("userForm");
+            AjaxJson(submitUrl,jsonForm, function (data) {
+                Loading(false);
+            	if(data.flag){//成功
+	                javascript:top.msg.ok(data.msg);
+            	}else{
+            		//失败
+	                javascript:top.msg.error(data.msg);
+            	}
+                if(data.flag){
+               		 closeDialog();
+               		 callBack();
+                }
+            });
+        }
+    }
+</script>
+<form id="userForm">
+    <div id="message" style="display: none; padding: 1px; padding-bottom: 0px;"></div>
+    <div class="bd" style="border-bottom: none; margin: 1px;">
+        <div class="tipstitle_title settingtable bold bd todayInfoPanelTab rightPanelTitle_normal">
+            <div class="tab_list_top" style="position: absolute">
+                <div id="Tabbasic" class="tab_list bd actived" onclick="Tabchange(&#39;basic&#39;)">基本信息</div>
+                <div id="Tabwork" class="tab_list bd " onclick="Tabchange(&#39;work&#39;)">工作相关</div>
+                <div id="TabCustomAttribute" class="tab_list bd " onclick="Tabchange(&#39;CustomAttribute&#39;)">自定义属性</div>
+            </div>
+        </div>
+    </div>
+    <div class="ScrollBar" style="margin: 1px; overflow: hidden;">
+        <!--基本信息-->
+        <div id="basic" class="tabPanel">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th class="formTitle">登录名</th>
+                    <td class="formValue" colspan="3">
+                     	<input id="userName" name="userName" type="text" style="display:block"
+                        	class="form-control required" datacol="yes" err="登录名" 
+                        	checkexpession="rangelength" minlength="2" maxlength="20">
+                        <input type="hidden" name="id" id="id"/><!-- 隐藏域，用户ID -->
+                    </td>
+                </tr>
+                <tr class="passwordTR">
+                    <th class="formTitle">密码</th>
+                    <td class="formValue" colspan="3">
+                        <input id="password" name="password" type="password"
+                        class="form-control required" datacol="yes" err="密码" 
+                        checkexpession="rangelength" minlength="6" maxlength="20">
+                    </td>
+                </tr>
+                <tr class="passwordTR">
+                    <th class="formTitle">确认密码</th>
+                    <td class="formValue" colspan="3">
+                        <input id="newPassword" type="password" class="form-control required" datacol="yes" err="密码"
+                        checkexpession="rangelength" minlength="6" maxlength="20">
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">真实姓名</th>
+                    <td class="formValue" colspan="3">
+                        <input id="realName" name="realName" type="text"
+                        class="form-control required" datacol="yes" err="真实姓名" 
+                        checkexpession="rangelength" minlength="2" maxlength="20">
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <!--工作相关-->
+        <!--自定义属性-->
+    </div>
+</form>
+    </div>
+</body></html>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.car.system.dao.IUserDAO">
+    <sql id="all_column">
+		  id id ,
+		  user_name userName,
+		  password password,
+		  real_name realName,
+		  last_login_ip lastLoginIp,
+		  last_login_time lastLoginTime,
+		  create_time createTime,
+		  create_user createUser,
+		  update_time updateTime,
+		  update_user updateUser,
+		  enabled enabled,
+  		  deleted deleted,
+  		  version version
+	</sql>
+    <sql id="all_column_npsw">
+		  id id ,
+		  user_name userName,
+		  real_name realName,
+		  last_login_ip lastLoginIp,
+		  last_login_time lastLoginTime,
+		  create_time createTime,
+		  create_user createUser,
+		  update_time updateTime,
+		  update_user updateUser,
+		  enabled enabled,
+  		  deleted deleted,
+  		  version version
+	</sql>
+    <select id="getAllUserForPage" parameterType="java.util.Map" resultType="org.car.system.model.User">
+        SELECT
+		<include refid="all_column_npsw" />
+		FROM SYSTEM_USER
+		WHERE deleted=0
+	 	<if test="userName != null and userName!=''">
+	        and user_name LIKE CONCAT(CONCAT('%', #{userName, jdbcType=VARCHAR}),'%')  
+	    </if>
+	 	<if test="realName!= null and realName!= ''">
+	        and real_name LIKE CONCAT(CONCAT('%', #{realName, jdbcType=VARCHAR}),'%')  
+	    </if>
+	    order by ${sortCol}  ${sortType}
+	    limit #{pageIndex},#{pageSize}
+    </select>
+    <select id="getAllUserCount" parameterType="java.util.Map" resultType="int">
+        SELECT count(id) FROM SYSTEM_USER
+		WHERE  deleted=0
+	 	<if test="userName != null and userName!=''">
+	        and user_name LIKE CONCAT(CONCAT('%', #{userName, jdbcType=VARCHAR}),'%')  
+	    </if>
+	 	<if test="realName!= null and realName!= ''">
+	        and real_name LIKE CONCAT(CONCAT('%', #{realName, jdbcType=VARCHAR}),'%')  
+	    </if>
+    </select>
+    <select id="getUserByUserName" parameterType="java.lang.String" resultType="org.car.system.model.User">
+        SELECT 
+        <include refid="all_column" />
+		from SYSTEM_USER 
+		where user_name= #{userName, jdbcType=VARCHAR}
+    </select>
+    <select id="getUserByUserId" parameterType="long" resultType="org.car.system.model.User">
+       SELECT 
+		<include refid="all_column_npsw" />
+		from SYSTEM_USER 
+		where id= #{id}
+    </select>
+    <!-- 新增用户 -->
+    <insert id="insertUser" parameterType="org.car.system.model.User">  
+		INSERT INTO SYSTEM_USER
+            (user_name,
+             password,
+             real_name,
+             create_user,
+             update_user,
+             create_time,
+             update_time,
+             enabled,
+             deleted)
+             VALUES 
+             (
+             	#{userName},
+             	#{password},
+             	#{realName},
+             	#{createUser},	
+             	#{updateUser},	
+             	now(),now(),0,0
+             )
+        <!-- 
+        	为了返回自增的id值
+         -->
+	    <selectKey resultType="long" keyProperty="id">  
+	        select last_insert_id() as ID from SYSTEM_USER limit 1  
+	    </selectKey>  
+	</insert>  
+    <update  id="updateUserById" parameterType="org.car.system.model.User">  
+		update SYSTEM_USER SET
+		<if test="userName != null and userName!=''">
+	        user_name=#{userName, jdbcType=VARCHAR},  
+	    </if>
+		<if test="realName != null and realName!=''">
+	        real_name=#{realName, jdbcType=VARCHAR},  
+	    </if>
+		<if test="lastLoginIp != null and lastLoginIp!=''">
+	        last_login_ip=#{lastLoginIp, jdbcType=VARCHAR},  
+	    </if>
+		<if test="lastLoginTime != null and lastLoginTime!=''">
+	        last_login_time=#{lastLoginTime,jdbcType=TIMESTAMP}, 
+	    </if>
+		<if test="createUser != null and createUser!=''">
+	        create_user=#{createUser,jdbcType=INTEGER}, 
+	    </if>
+		<if test="enabled != null">
+	        enabled=#{enabled,jdbcType=BIT}, 
+	    </if>
+		<if test="deleted != null">
+	   		deleted=#{deleted,jdbcType=BIT},
+	    </if>
+		<if test="updateUser != null and updateUser!=''">
+	    	update_user=#{updateUser,jdbcType=INTEGER}, 
+	    </if>
+		<if test="updateTime != null and updateTime!=''">
+	    	update_time=#{updateTime,jdbcType=TIMESTAMP},
+	    </if>
+	    VERSION = #{version,jdbcType=INTEGER} +1
+	    WHERE id = #{id,jdbcType=INTEGER}
+	</update>  
+    <update  id="updateUserPasswordById" parameterType="org.car.system.model.User">  
+		update SYSTEM_USER SET
+		<if test="password != null and password!=''">
+	        password=#{password, jdbcType=VARCHAR},  
+	    </if>
+	    VERSION = #{version,jdbcType=INTEGER} +1
+	    WHERE id = #{id,jdbcType=INTEGER}
+	</update>  
+</mapper>

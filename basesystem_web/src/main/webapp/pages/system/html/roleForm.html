@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>角色管理界面</title>
+    <!--框架必需start-->
+     <!-- bootstrap -->
+	<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">  
+    <link href="/css/style/learunui-framework.css" rel="stylesheet">
+    
+    <script src="/js/common/jquery-1.8.2.min.js"></script>
+    <script src="/js/common/learunui-framework.js"></script>
+    <!--框架必需end-->
+    <!-- JQuery alertify组件，右下角提示弹框-->
+    <script src="/js/alertify/alertify.min.js" type="text/javascript"></script>
+    <script src="/pages/js/main.js"></script>
+    <!--表单验证组件start-->
+    <script src="/js/validator/learunui-validator.js"></script>
+    <!--表单验证组件end-->
+    <!--布局组件start-->
+    <script src="/js/common/splitter.js"></script>
+    <!--布局组件end-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Loadlayout();
+        });
+    </script>
+</head>
+<body>
+<div>
+<script type="text/javascript">
+    
+    var submitUrl = "/role/addNewRole.json";
+    $(function () {
+        //根据前台传递的主键查询用户实体信息
+        if (!!GetQuery('KeyValue')) {
+        	submitUrl = "/role/editRole.json";
+        	//编辑状态，密码不允许修改,密码框隐藏
+        	var url = "/role/queryRoleById.json";
+            AjaxJson(url, {"id": GetQuery('KeyValue') }, function (data) {
+            	//赋值form
+            	SetWebControls(data);
+            });
+        }
+    })
+    /**
+    	*保存事件
+    	*@params callBack 响应函数
+    */
+    function AcceptClick(callBack) {
+    	var flag = false;
+    	//检测是否空
+    	var f = CheckDataValid('#roleForm');
+    	//检测是否
+    	if(f){
+    		//检测名称重复
+	    	flag = FieldExist('roleName','system_role','role_name','id','角色名称')
+    	}
+        if(flag){
+	        Loading(true, "正在提交数据...");
+	        var jsonForm  = createParamForm("roleForm");
+            AjaxJson(submitUrl,jsonForm, function (data) {
+                Loading(false);
+                javascript:top.msg.ok(data.msg);
+                if(data.flag){
+               		 closeDialog();
+               		 callBack();
+                }
+            });
+        }
+    }
+</script>
+<form id="roleForm">
+    <div id="message" style="display: none; padding: 1px; padding-bottom: 0px;"></div>
+     <div class="bd" style="border-bottom: none; margin: 1px;">
+        <div class="tipstitle_title settingtable bold bd todayInfoPanelTab rightPanelTitle_normal">
+            <div class="tab_list_top" style="position: absolute">
+                <div id="Tabbasic" class="tab_list bd actived" onclick="Tabchange('basic')">基本信息</div>
+                <div id="TabOperatingAuthority" class="tab_list bd " onclick="Tabchange('OperatingAuthority')">操作权限</div>
+                <div id="TabDataAuthority" class="tab_list bd " onclick="Tabchange('DataAuthority')">数据权限</div>
+            </div>
+        </div>
+    </div>
+    <div class="ScrollBar" style="margin: 1px; overflow: hidden;">
+        <!--基本信息-->
+        <div id="basic" class="tabPanel">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th class="formTitle">角色名称</th>
+                    <td class="formValue" colspan="3">
+                    	<input type="hidden" name="id" id="id" value=""/>
+                        <input id="roleName" name="roleName" 
+                        placeholder="角色名称选填,且不能重复"
+                        type="text" class="form-control  required " datacol="yes" err="登录名" 
+                        checkexpession="rangelength" minlength="1" maxlength="40">
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">备注信息</th>
+                    <td class="formValue" colspan="3">
+                        <textarea id="remark" name="remark" 
+                         style="width:510px;height:200px;" 
+                         checkexpession="rangelength" maxlength="1000"
+                         class="form-control get-control required" 
+                         placeholder="选填,最多1000个字符或500个中文"></textarea>
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <!--数据权限-->
+        <div id="OperatingAuthority" class="tabPanel" style="display: none;">数据权限</div>
+        <!--操作权限-->
+        <div id="DataAuthority" class="tabPanel" style="display: none;">操作权限</div>
+    </div>
+
+</form>
+    </div>
+</body></html>
